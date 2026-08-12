@@ -1,4 +1,3 @@
-
 import { useEffect, useMemo, useState } from "react";
 import { contentById, kanjiContent } from "../shared/content";
 import type { MasteryItem, ReviewRecommendation, Skill } from "../shared/contracts";
@@ -135,28 +134,26 @@ function App() {
       <main>
         {view === "home" && (
           <section className="home-view">
-            <div className="hero-copy">
-              <div className="eyebrow">JLPT N5 · Active recall</div>
-              <h1>Knowing a kanji is<br /><em>more than recognizing it.</em></h1>
-              <p>Kaku tracks recognition, reading, and writing as separate skills, then shows exactly what to review next.</p>
-              <div className="hero-actions">
-                <button className="primary-button" onClick={startGuided}>Start guided session <span>→</span></button>
-                <button className="secondary-button" onClick={() => setView("path")}>Explore the path</button>
+            <div className="start-card">
+              <img className="start-logo" src="/kaku-logo.jpeg" alt="Kaku Japanese literacy trainer" />
+              <div className="start-copy">
+                <div className="eyebrow">JLPT N5 · Practice session</div>
+                <h1>Ready to practice?</h1>
+                <p>Recognize, read, and write kanji in one short guided session—or choose a skill below.</p>
+                <button className="primary-button start-guided" onClick={startGuided}>Start guided session <span>→</span></button>
               </div>
-              <div className="trust-row"><span>12 essential kanji</span><span>Explainable review</span><span>No account needed</span></div>
             </div>
-            <div className="threshold-card">
-              <div className="sakura" aria-hidden="true">枝 · 桜</div>
-              <div className="jlpt-stamp">JLPT<br /><strong>N5</strong></div>
-              <h2>Study Threshold</h2>
-              <p>Choose a practice mode</p>
+            <div className="practice-menu">
+              <div className="practice-menu-heading">
+                <div><div className="eyebrow">Quick practice</div><h2>Choose a skill</h2></div>
+                <div className="session-summary"><span><strong>{assessedCount}</strong> assessed</span><span><strong>{averageMastery || "—"}</strong> mastery</span></div>
+              </div>
               <div className="mode-list">
                 <button onClick={() => setView("recognition")}><span>漢</span><strong>Learn</strong><small>Recognize meaning</small><b>→</b></button>
                 <button onClick={() => setView("reading")}><span>読</span><strong>Read</strong><small>Use real vocabulary</small><b>→</b></button>
                 <button className="featured" onClick={() => setView("writing")}><span>筆</span><strong>Write</strong><small>Produce from memory</small><b>→</b></button>
                 <button onClick={() => setView("review")}><span>復</span><strong>Review</strong><small>Strengthen weak skills</small><b>→</b></button>
               </div>
-              <div className="session-summary"><span><strong>{assessedCount}</strong> skills assessed</span><span><strong>{averageMastery || "—"}</strong> mastery</span></div>
             </div>
           </section>
         )}
