@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import type { KanjiContent, Stroke, StrokePoint } from "../shared/contracts";
 import { normalizePoint, validateWriting, type WritingFeedback } from "./lib/writing";
@@ -10,6 +9,7 @@ interface PracticeCanvasProps {
 
 export function PracticeCanvas({ content, onResult }: PracticeCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const activeStrokeRef = useRef<Stroke | null>(null);
   const [strokes, setStrokes] = useState<Stroke[]>([]);
   const [activeStroke, setActiveStroke] = useState<Stroke | null>(null);
   const [hintLevel, setHintLevel] = useState(0);
@@ -17,6 +17,7 @@ export function PracticeCanvas({ content, onResult }: PracticeCanvasProps) {
 
   useEffect(() => {
     setStrokes([]);
+    activeStrokeRef.current = null;
     setActiveStroke(null);
     setHintLevel(0);
     setFeedback(null);
@@ -106,6 +107,7 @@ export function PracticeCanvas({ content, onResult }: PracticeCanvasProps) {
 
   const clear = () => {
     setStrokes([]);
+    activeStrokeRef.current = null;
     setActiveStroke(null);
     setFeedback(null);
   };
@@ -114,6 +116,15 @@ export function PracticeCanvas({ content, onResult }: PracticeCanvasProps) {
     const result = validateWriting(content, strokes);
     setFeedback(result);
     onResult(result, hintLevel);
+  };
+
+  const finishStroke = (point?: StrokePoint) => {
+    const current = activeStrokeRef.current;
+    if (!current) return;
+    const completed = point ? [...current, point] : current;
+    if (completed.length > 1) setStrokes((existing) => [...existing, completed]);
+    activeStrokeRef.current = null;
+    setActiveStroke(null);
   };
 
   return (
@@ -128,19 +139,23 @@ export function PracticeCanvas({ content, onResult }: PracticeCanvasProps) {
         className="practice-canvas"
         aria-label={`Practice writing ${content.character}`}
         onPointerDown={(event) => {
+          event.preventDefault();
           event.currentTarget.setPointerCapture(event.pointerId);
           setFeedback(null);
-          setActiveStroke([pointFromEvent(event)]);
+          const stroke = [pointFromEvent(event)];
+          activeStrokeRef.current = stroke;
+          setActiveStroke(stroke);
         }}
         onPointerMove={(event) => {
-          if (!activeStroke) return;
-          setActiveStroke((stroke) => stroke ? [...stroke, pointFromEvent(event)] : null);
+          if (!activeStrokeRef.current) return;
+          const stroke = [...activeStrokeRef.current, pointFromEvent(event)];
+          activeStrokeRef.current = stroke;
+          setActiveStroke(stroke);
         }}
         onPointerUp={(event) => {
-          if (!activeStroke) return;
-          setStrokes((existing) => [...existing, [...activeStroke, pointFromEvent(event)]]);
-          setActiveStroke(null);
+          finishStroke(pointFromEvent(event));
         }}
+        onPointerCancel={() => finishStroke()}
       />
       <p className={`writing-feedback ${feedback?.correct ? "success" : feedback ? "error" : ""}`} aria-live="polite">
         {feedback?.message ?? (content.referenceStrokes ? "Draw from memory, then check your strokes." : "Practice mode checks stroke count only.")}
