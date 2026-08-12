@@ -112,6 +112,11 @@ export function PracticeCanvas({ content, onResult }: PracticeCanvasProps) {
     setFeedback(null);
   };
 
+  const undo = () => {
+    setStrokes((existing) => existing.slice(0, -1));
+    setFeedback(null);
+  };
+
   const check = () => {
     const result = validateWriting(content, strokes);
     setFeedback(result);
@@ -122,7 +127,9 @@ export function PracticeCanvas({ content, onResult }: PracticeCanvasProps) {
     const current = activeStrokeRef.current;
     if (!current) return;
     const completed = point ? [...current, point] : current;
-    if (completed.length > 1) setStrokes((existing) => [...existing, completed]);
+    if (completed.length > 1 && Math.hypot(completed.at(-1)!.x - completed[0].x, completed.at(-1)!.y - completed[0].y) > .015) {
+      setStrokes((existing) => [...existing, completed]);
+    }
     activeStrokeRef.current = null;
     setActiveStroke(null);
   };
@@ -130,7 +137,7 @@ export function PracticeCanvas({ content, onResult }: PracticeCanvasProps) {
   return (
     <div className="practice-area">
       <div className="practice-toolbar">
-        <button className="text-button" onClick={clear}>Clear</button>
+        <div className="practice-tools"><button className="text-button" onClick={undo} disabled={strokes.length === 0}>Undo</button><button className="text-button" onClick={clear}>Clear</button></div>
         <span>{strokes.length} / {content.strokeCount} strokes</span>
         <button className="text-button" onClick={() => setHintLevel((level) => Math.min(3, level + 1))}>Hint {hintLevel}/3</button>
       </div>
@@ -148,14 +155,17 @@ export function PracticeCanvas({ content, onResult }: PracticeCanvasProps) {
         }}
         onPointerMove={(event) => {
           if (!activeStrokeRef.current) return;
+          event.preventDefault();
           const stroke = [...activeStrokeRef.current, pointFromEvent(event)];
           activeStrokeRef.current = stroke;
           setActiveStroke(stroke);
         }}
         onPointerUp={(event) => {
+          event.preventDefault();
           finishStroke(pointFromEvent(event));
         }}
         onPointerCancel={() => finishStroke()}
+        onLostPointerCapture={() => finishStroke()}
       />
       <p className={`writing-feedback ${feedback?.correct ? "success" : feedback ? "error" : ""}`} aria-live="polite">
         {feedback?.message ?? (content.referenceStrokes ? "Draw from memory, then check your strokes." : "Practice mode checks stroke count only.")}
