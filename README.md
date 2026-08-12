@@ -1,7 +1,12 @@
-
 # Kaku
 
 Kaku is a Japanese literacy trainer built for the Major League Hacking hackathon. It treats recognition, reading, and writing as separate but connected skills, then explains exactly what the learner should review next.
+
+## Live demo
+
+- Frontend: https://kaku-hackathon.vercel.app
+- Review API: https://kaku-review-engine.onrender.com
+- Health check: https://kaku-review-engine.onrender.com/health
 
 ## Why Render matters
 
