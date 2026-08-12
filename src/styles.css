@@ -1,4 +1,3 @@
-
 :root {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: #2f2b28;
@@ -35,7 +34,7 @@ nav button:hover { color: var(--vermilion); }
 .engine-banner.offline { background: #f1ede7; color: #6d6258; }
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 18%, transparent); }
 main { max-width: 1280px; margin: 0 auto; min-height: calc(100vh - 190px); padding: clamp(32px, 5vw, 72px); }
-.home-view { display: grid; grid-template-columns: 1.05fr .75fr; align-items: center; gap: clamp(50px, 8vw, 120px); min-height: 680px; }
+.home-view { display: grid; gap: 24px; max-width: 980px; margin: 0 auto; min-height: auto; }
 .eyebrow { color: var(--vermilion); text-transform: uppercase; letter-spacing: .16em; font-size: 12px; font-weight: 850; margin-bottom: 18px; }
 .hero-copy h1, .path-copy h1, .review-heading h1 { font-family: Georgia, "Yu Mincho", serif; font-size: clamp(48px, 6.3vw, 82px); line-height: .98; letter-spacing: -.055em; margin: 0 0 24px; font-weight: 500; }
 .hero-copy h1 em { color: var(--vermilion); font-style: italic; }
@@ -96,3 +95,43 @@ footer { min-height: 68px; padding: 0 clamp(20px,5vw,72px); display: flex; align
 }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+
+.start-card, .practice-menu { background: rgba(255,253,249,.86); border: 1px solid var(--line); box-shadow: 0 18px 50px rgba(55,45,38,.08); }
+.start-card { display: grid; grid-template-columns: 220px 1fr; align-items: center; gap: 38px; padding: 28px; }
+.start-logo { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 24px; box-shadow: 0 10px 28px rgba(47,43,40,.14); }
+.start-copy h1 { font: 500 clamp(38px,5vw,58px) Georgia,"Yu Mincho",serif; letter-spacing: -.045em; margin: 0 0 12px; }
+.start-copy p { max-width: 560px; color: #615950; font-size: 17px; line-height: 1.55; }
+.start-guided { margin-top: 10px; }
+.practice-menu { padding: 28px; }
+.practice-menu-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 20px; }
+.practice-menu-heading .eyebrow { margin-bottom: 7px; }
+.practice-menu-heading h2 { font: 500 30px Georgia,serif; margin: 0; }
+.practice-menu .mode-list { grid-template-columns: repeat(4,1fr); gap: 12px; }
+.practice-menu .mode-list button { min-width: 0; grid-template-columns: 40px 1fr 20px; }
+.practice-menu .session-summary { gap: 20px; margin: 0; padding: 0; border: 0; white-space: nowrap; }
+.practice-tools { display: flex; gap: 6px; }
+.text-button:disabled { opacity: .4; cursor: default; }
+.practice-canvas { cursor: crosshair; }
+
+@media (max-width: 860px) {
+  main { padding-top: 24px; }
+  .home-view { gap: 18px; }
+  .start-card { grid-template-columns: 88px 1fr; gap: 18px; padding: 18px; }
+  .start-logo { border-radius: 14px; align-self: start; }
+  .start-copy h1 { font-size: 34px; }
+  .start-copy p { font-size: 14px; }
+  .practice-menu { padding: 20px; }
+  .practice-menu-heading { align-items: start; flex-direction: column; }
+  .practice-menu .mode-list { grid-template-columns: 1fr 1fr; }
+  .practice-menu .session-summary { width: 100%; justify-content: space-between; }
+}
+
+@media (max-width: 520px) {
+  .start-card { grid-template-columns: 68px 1fr; }
+  .start-copy .eyebrow { margin-bottom: 8px; }
+  .start-copy h1 { font-size: 28px; }
+  .start-copy p { grid-column: 1 / -1; }
+  .start-guided { width: 100%; }
+  .practice-menu .mode-list { grid-template-columns: 1fr; }
+  .practice-toolbar { flex-wrap: wrap; }
+}
