@@ -135,7 +135,7 @@ function App() {
         {view === "home" && (
           <section className="home-view">
             <div className="start-card">
-              <img className="start-logo" src="/kaku-logo-web.jpg" alt="Kaku Japanese literacy trainer" />
+              <img className="start-logo" src="/kaku-logo-finished.png" alt="Kaku Japanese literacy trainer" />
               <div className="start-copy">
                 <div className="eyebrow">JLPT N5 · Practice session</div>
                 <h1>Ready to practice?</h1>
