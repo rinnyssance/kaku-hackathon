@@ -1,0 +1,15 @@
+
+services:
+  - type: web
+    name: kaku-review-engine
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build:server
+    startCommand: npm run start:server
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: ALLOWED_ORIGINS
+        sync: false
